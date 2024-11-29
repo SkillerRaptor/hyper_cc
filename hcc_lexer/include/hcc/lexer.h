@@ -12,6 +12,7 @@
 
 #include <hcc/prerequisites.h>
 #include <hcc/result.h>
+#include <hcc/vector.h>
 
 #include "hcc/token.h"
 
@@ -31,9 +32,7 @@ struct HccLexer
 enum HccResult hcc_lexer_init(struct HccLexer *lexer, const char *code);
 void hcc_lexer_free(struct HccLexer *lexer);
 
-enum HccResult hcc_lexer_next_token(struct HccLexer *lexer, struct HccToken *token);
-
-bool hcc_lexer_is_at_end(struct HccLexer *lexer);
+enum HccResult hcc_lex_tokens(struct HccLexer *lexer, struct HccVector *tokens);
 
 HCC_EXTERN_C_END
 

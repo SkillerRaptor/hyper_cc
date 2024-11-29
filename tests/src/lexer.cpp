@@ -17,14 +17,21 @@ std::vector<HccToken> lex_tokens(const std::string_view code)
     HccLexer lexer = {};
     REQUIRE(hcc_lexer_init(&lexer, code.data()) == HCC_RESULT_OK);
 
-    std::vector<HccToken> tokens = {};
-    while (!hcc_lexer_is_at_end(&lexer))
-    {
-        HccToken token = {};
-        REQUIRE(hcc_lexer_next_token(&lexer, &token) == HCC_RESULT_OK);
+    HccVector hcc_tokens = { 0 };
+    REQUIRE(hcc_vector_init(&hcc_tokens, sizeof(struct HccToken)) == HCC_RESULT_OK);
+    REQUIRE(hcc_lex_tokens(&lexer, &hcc_tokens) == HCC_RESULT_OK);
 
-        tokens.push_back(token);
+    std::vector<HccToken> tokens = {};
+    for (size_t i = 0; i < hcc_tokens.size; i++)
+    {
+        HccToken *token = {};
+        REQUIRE(hcc_vector_get(&hcc_tokens, i, &token) == HCC_RESULT_OK);
+
+        tokens.push_back(*token);
     }
+
+    hcc_vector_free(&hcc_tokens);
+    hcc_lexer_free(&lexer);
 
     return tokens;
 }
@@ -33,10 +40,10 @@ void compare_tokens(const std::span<const HccToken> tokens, const std::span<cons
 {
     REQUIRE(tokens.size() == expected_tokens.size());
 
-    for (size_t index = 0; index < tokens.size(); ++index)
+    for (size_t i = 0; i < tokens.size(); ++i)
     {
-        const HccToken &token = tokens[index];
-        const HccToken &expected_token = expected_tokens[index];
+        const HccToken &token = tokens[i];
+        const HccToken &expected_token = expected_tokens[i];
 
         REQUIRE(token.type == expected_token.type);
 

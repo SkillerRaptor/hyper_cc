@@ -8,7 +8,6 @@
 
 #include <ctype.h>
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 
 enum HccResult hcc_lexer_init(struct HccLexer *lexer, const char *code)
@@ -23,8 +22,8 @@ enum HccResult hcc_lexer_init(struct HccLexer *lexer, const char *code)
         return HCC_RESULT_BAD_PARAMETER;
     }
 
-    lexer->code = code;
-    lexer->code_size = strlen(code);
+    lexer->code = strdup(code);
+    lexer->code_size = strlen(lexer->code);
 
     lexer->start_index = 0;
     lexer->current_index = 0;
@@ -34,7 +33,22 @@ enum HccResult hcc_lexer_init(struct HccLexer *lexer, const char *code)
     return HCC_RESULT_OK;
 }
 
-enum HccResult hcc_lexer_advance(struct HccLexer *lexer, char *character)
+void hcc_lexer_free(struct HccLexer *lexer)
+{
+    if (lexer == NULL)
+    {
+        return;
+    }
+
+    free((void *) lexer->code);
+}
+
+static bool hcc_lexer_is_at_end(struct HccLexer *lexer)
+{
+    return lexer->current_index >= lexer->code_size;
+}
+
+static enum HccResult hcc_lexer_advance(struct HccLexer *lexer, char *character)
 {
     if (hcc_lexer_is_at_end(lexer))
     {
@@ -47,24 +61,21 @@ enum HccResult hcc_lexer_advance(struct HccLexer *lexer, char *character)
     return HCC_RESULT_OK;
 }
 
-void hcc_lexer_peek(struct HccLexer *lexer, char *character)
+static char hcc_lexer_peek(struct HccLexer *lexer)
 {
     if (hcc_lexer_is_at_end(lexer))
     {
-        *character = '\0';
-        return;
+        return '\0';
     }
 
-    *character = lexer->code[lexer->current_index];
+    return lexer->code[lexer->current_index];
 }
 
-enum HccResult hcc_lexer_lex_number(struct HccLexer *lexer, struct HccToken *token)
+static enum HccResult hcc_lexer_lex_number(struct HccLexer *lexer, struct HccToken *token)
 {
     enum HccResult result = HCC_RESULT_OK;
 
-    char character = '\0';
-    hcc_lexer_peek(lexer, &character);
-
+    char character = hcc_lexer_peek(lexer);
     while (isdigit(character))
     {
         if ((result = hcc_lexer_advance(lexer, &character)) != HCC_RESULT_OK)
@@ -72,7 +83,7 @@ enum HccResult hcc_lexer_lex_number(struct HccLexer *lexer, struct HccToken *tok
             return result;
         }
 
-        hcc_lexer_peek(lexer, &character);
+        character = hcc_lexer_peek(lexer);
     }
 
     // TODO: Handle floating point
@@ -83,10 +94,8 @@ enum HccResult hcc_lexer_lex_number(struct HccLexer *lexer, struct HccToken *tok
     return HCC_RESULT_OK;
 }
 
-enum HccResult hcc_lexer_next_token(struct HccLexer *lexer, struct HccToken *token)
+static enum HccResult hcc_lexer_next_token(struct HccLexer *lexer, struct HccToken *token)
 {
-    enum HccResult result = HCC_RESULT_OK;
-
     if (lexer == NULL)
     {
         return HCC_RESULT_BAD_PARAMETER;
@@ -96,6 +105,8 @@ enum HccResult hcc_lexer_next_token(struct HccLexer *lexer, struct HccToken *tok
     {
         return HCC_RESULT_BAD_PARAMETER;
     }
+
+    enum HccResult result = HCC_RESULT_OK;
 
     lexer->start_index = lexer->current_index;
     token->type = HCC_TOKEN_TYPE_INVALID;
@@ -140,7 +151,33 @@ enum HccResult hcc_lexer_next_token(struct HccLexer *lexer, struct HccToken *tok
     return HCC_RESULT_OK;
 }
 
-bool hcc_lexer_is_at_end(struct HccLexer *lexer)
+enum HccResult hcc_lex_tokens(struct HccLexer *lexer, struct HccVector *tokens)
 {
-    return lexer->current_index >= lexer->code_size;
+    if (lexer == NULL)
+    {
+        return HCC_RESULT_BAD_PARAMETER;
+    }
+
+    if (tokens == NULL)
+    {
+        return HCC_RESULT_BAD_PARAMETER;
+    }
+
+    enum HccResult result = HCC_RESULT_OK;
+
+    while (!hcc_lexer_is_at_end(lexer))
+    {
+        struct HccToken token = { 0 };
+        if ((result = hcc_lexer_next_token(lexer, &token)) != HCC_RESULT_OK)
+        {
+            return result;
+        }
+
+        if ((result = hcc_vector_push_back(tokens, &token)) != HCC_RESULT_OK)
+        {
+            return result;
+        }
+    }
+
+    return HCC_RESULT_OK;
 }
