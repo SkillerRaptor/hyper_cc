@@ -151,7 +151,7 @@ static enum HccResult hcc_lexer_next_token(struct HccLexer *lexer, struct HccTok
     return HCC_RESULT_OK;
 }
 
-enum HccResult hcc_lex_tokens(struct HccLexer *lexer, struct HccVector *tokens)
+enum HccResult hcc_lexer_lex_tokens(struct HccLexer *lexer, struct HccVector *tokens)
 {
     if (lexer == NULL)
     {

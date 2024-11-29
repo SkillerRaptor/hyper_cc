@@ -19,7 +19,7 @@ std::vector<HccToken> lex_tokens(const std::string_view code)
 
     HccVector hcc_tokens = { 0 };
     REQUIRE(hcc_vector_init(&hcc_tokens, sizeof(struct HccToken)) == HCC_RESULT_OK);
-    REQUIRE(hcc_lex_tokens(&lexer, &hcc_tokens) == HCC_RESULT_OK);
+    REQUIRE(hcc_lexer_lex_tokens(&lexer, &hcc_tokens) == HCC_RESULT_OK);
 
     std::vector<HccToken> tokens = {};
     for (size_t i = 0; i < hcc_tokens.size; i++)

@@ -29,7 +29,7 @@ int main(void)
         return -1;
     }
 
-    if ((result = hcc_lex_tokens(&lexer, &tokens)) != HCC_RESULT_OK)
+    if ((result = hcc_lexer_lex_tokens(&lexer, &tokens)) != HCC_RESULT_OK)
     {
         fprintf(stderr, "failed to lex tokens: %s\n", hcc_result_description(result));
         return -1;
