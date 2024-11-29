@@ -28,7 +28,7 @@ void hcc_vector_free(struct HccVector *vector);
 
 enum HccResult hcc_vector_push_back(struct HccVector *vector, void *element);
 
-enum HccResult hcc_vector_get(struct HccVector *vector, size_t index, void *element);
+enum HccResult hcc_vector_get(struct HccVector *vector, size_t index, void **element);
 
 HCC_EXTERN_C_END
 
