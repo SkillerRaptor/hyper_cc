@@ -15,30 +15,28 @@
 
 HCC_EXTERN_C_BEGIN
 
-enum HccTokenType
+enum HccTokenKind
 {
-    HCC_TOKEN_TYPE_INVALID,
+    HCC_TOKEN_KIND_INVALID,
 
     // Constant
-    HCC_TOKEN_TYPE_INTEGER_CONSTANT,
+    HCC_TOKEN_KIND_INTEGER_CONSTANT,
 
     // Punctuator
     // +
-    HCC_TOKEN_TYPE_PLUS,
+    HCC_TOKEN_KIND_PLUS,
 };
 
 struct HccToken
 {
     // TODO: Add source location
-    enum HccTokenType type;
+    enum HccTokenKind kind;
     union
     {
         uint64_t integer;
         // TODO: Add other values
-    } data;
+    };
 };
-
-const char *hcc_token_type_description(enum HccTokenType type);
 
 HCC_EXTERN_C_END
 

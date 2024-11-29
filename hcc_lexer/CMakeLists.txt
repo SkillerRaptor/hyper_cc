@@ -4,8 +4,7 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------------------
 set(SOURCES
-        src/hcc/lexer.c
-        src/hcc/token.c)
+        src/hcc/lexer.c)
 
 set(HEADERS
         include/hcc/lexer.h

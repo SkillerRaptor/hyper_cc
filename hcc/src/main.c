@@ -35,25 +35,6 @@ int main(void)
         return -1;
     }
 
-    for (size_t i = 0; i < tokens.size; i++)
-    {
-        struct HccToken *token = { 0 };
-        if ((result = hcc_vector_get(&tokens, i, &token)) != HCC_RESULT_OK)
-        {
-            return result;
-        }
-
-        switch (token->type)
-        {
-        case HCC_TOKEN_TYPE_INTEGER_CONSTANT:
-            printf("%s (%llu)\n", hcc_token_type_description(token->type), token->data.integer);
-            break;
-        default:
-            printf("%s\n", hcc_token_type_description(token->type));
-            break;
-        }
-    }
-
     hcc_vector_free(&tokens);
     hcc_lexer_free(&lexer);
 

@@ -88,8 +88,8 @@ static enum HccResult hcc_lexer_lex_number(struct HccLexer *lexer, struct HccTok
 
     // TODO: Handle floating point
 
-    token->type = HCC_TOKEN_TYPE_INTEGER_CONSTANT;
-    token->data.integer = strtoll(lexer->code + lexer->start_index, NULL, 10);
+    token->kind = HCC_TOKEN_KIND_INTEGER_CONSTANT;
+    token->integer = strtoll(lexer->code + lexer->start_index, NULL, 10);
 
     return HCC_RESULT_OK;
 }
@@ -109,9 +109,9 @@ static enum HccResult hcc_lexer_next_token(struct HccLexer *lexer, struct HccTok
     enum HccResult result = HCC_RESULT_OK;
 
     lexer->start_index = lexer->current_index;
-    token->type = HCC_TOKEN_TYPE_INVALID;
+    token->kind = HCC_TOKEN_KIND_INVALID;
 
-    while (token->type == HCC_TOKEN_TYPE_INVALID)
+    while (token->kind == HCC_TOKEN_KIND_INVALID)
     {
         char character = '\0';
         if ((result = hcc_lexer_advance(lexer, &character)) != HCC_RESULT_OK)
@@ -122,7 +122,7 @@ static enum HccResult hcc_lexer_next_token(struct HccLexer *lexer, struct HccTok
         switch (character)
         {
         case '+':
-            token->type = HCC_TOKEN_TYPE_PLUS;
+            token->kind = HCC_TOKEN_KIND_PLUS;
             break;
         case ' ':
         case '\t':

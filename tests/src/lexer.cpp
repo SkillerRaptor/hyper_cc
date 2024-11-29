@@ -45,12 +45,12 @@ void compare_tokens(const std::span<const HccToken> tokens, const std::span<cons
         const HccToken &token = tokens[i];
         const HccToken &expected_token = expected_tokens[i];
 
-        REQUIRE(token.type == expected_token.type);
+        REQUIRE(token.kind == expected_token.kind);
 
-        switch (token.type)
+        switch (token.kind)
         {
-        case HCC_TOKEN_TYPE_INTEGER_CONSTANT:
-            REQUIRE(token.data.integer == expected_token.data.integer);
+        case HCC_TOKEN_KIND_INTEGER_CONSTANT:
+            REQUIRE(token.integer == expected_token.integer);
             break;
         default:
             break;
@@ -65,19 +65,15 @@ TEST_CASE("Addition")
 
     constexpr std::array<HccToken, 3> expected_tokens = {
         HccToken{
-            .type = HCC_TOKEN_TYPE_INTEGER_CONSTANT,
-            .data = {
-                .integer = 1,
-            },
+            .kind = HCC_TOKEN_KIND_INTEGER_CONSTANT,
+            .integer = 1,
         },
         HccToken{
-            .type = HCC_TOKEN_TYPE_PLUS,
+            .kind = HCC_TOKEN_KIND_PLUS,
         },
         HccToken{
-            .type = HCC_TOKEN_TYPE_INTEGER_CONSTANT,
-            .data = {
-                .integer = 2,
-            },
+            .kind = HCC_TOKEN_KIND_INTEGER_CONSTANT,
+            .integer = 2,
         },
     };
 
