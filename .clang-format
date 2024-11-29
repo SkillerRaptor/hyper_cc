@@ -38,6 +38,7 @@ DisableFormat: false
 FixNamespaceComments: true
 IncludeBlocks: Merge
 IndentCaseLabels: false
+IndentExternBlock: NoIndent
 IndentPPDirectives: AfterHash
 IndentWidth: 4
 IndentWrappedFunctionNames: true

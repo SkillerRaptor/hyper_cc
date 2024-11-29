@@ -4,14 +4,10 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------------------
 set(SOURCES
-        src/main.c)
+        src/hcc/result.c)
 
 set(HEADERS
-)
+        include/hcc/prerequisites.h
+        include/hcc/result.h)
 
-hyper_cc_define_executable(hcc)
-target_link_libraries(
-        hcc
-        PRIVATE
-        hcc_core
-        hcc_lexer)
+hyper_cc_define_library(hcc_core)

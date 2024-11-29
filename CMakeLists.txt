@@ -44,6 +44,7 @@ include(cmake/Utils.cmake)
 # Source
 #-------------------------------------------------------------------------------------------
 add_subdirectory(hcc_core)
+add_subdirectory(hcc_lexer)
 add_subdirectory(hcc)
 
 if (HCC_ENABLE_TESTS)

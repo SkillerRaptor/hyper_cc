@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------------------
 set(SOURCES
-        src/main.cpp)
+        src/lexer.cpp)
 
 set(HEADERS
 )
@@ -13,4 +13,6 @@ hyper_cc_define_executable(hcc_tests)
 target_link_libraries(
         hcc_tests
         PRIVATE
-        Catch2::Catch2WithMain)
+        Catch2::Catch2WithMain
+        hcc_core
+        hcc_lexer)
